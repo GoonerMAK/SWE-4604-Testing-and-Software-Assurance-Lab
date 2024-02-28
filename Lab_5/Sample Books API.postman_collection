@@ -1,0 +1,273 @@
+{
+	"info": {
+		"_postman_id": "8da5f3fa-f6ac-493d-b6d8-0bdf873af124",
+		"name": "Sample Books API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26308224"
+	},
+	"item": [
+		{
+			"name": "Status Check",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Test 1\", function(){\r",
+							"    pm.expect(pm.response.code).to.be.eql(200);\r",
+							"    pm.expect(pm.response.status).to.be.eql(\"OK\");\r",
+							"    pm.response.to.have.body('{\"status\":\"OK\"}');\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/status",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Books",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Test 2\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    console.log(jsonData);\r",
+							"    jsonData.forEach(function(book) {\r",
+							"        pm.expect(book.type).to.eql(\"fiction\");\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/books?type=fiction",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"books"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "fiction"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Global Available Book ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"pm.test(\"Test 3\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    console.log(jsonData);\r",
+							"\r",
+							"    var availableBooks = [];\r",
+							"    jsonData.forEach(function(book) {\r",
+							"        if(book.available == true) {\r",
+							"            availableBooks.push(book);\r",
+							"        }\r",
+							"    });\r",
+							"\r",
+							"    pm.globals.set('AvailableBookId', availableBooks[0].id);\r",
+							"\r",
+							"    pm.expect(pm.globals.get('AvailableBookId')).to.eql(availableBooks[0].id);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/books",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"books"
+					],
+					"query": [
+						{
+							"key": "available",
+							"value": "true",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "First Book Check",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Test 4\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    var availableBooks = [];\r",
+							"    jsonData.forEach(function(book) {\r",
+							"        if(book.available == true) {\r",
+							"            availableBooks.push(book);\r",
+							"        }\r",
+							"    });\r",
+							"\r",
+							"    var name = availableBooks[0].name.toLowerCase();\r",
+							"    var type = availableBooks[0].type.toLowerCase();  \r",
+							"\r",
+							"    pm.expect(name.includes(\"russian\"));\r",
+							"    pm.expect(type).to.eql(\"fiction\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/books",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Posting Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Test 5\", function () {\r",
+							"    var responseData = pm.response.json();\r",
+							"    console.log(responseData); \r",
+							"    \r",
+							"    var orderId = responseData[responseData.length - 1].id;\r",
+							"    console.log(orderId);\r",
+							"    pm.globals.set(\"orderId\", orderId);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "12a0d6c919a42d10d24e3493e8ff13e68de2f13cf22671e89f57dda9b32e2973",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bookId\": {{AvailableBookId}},\r\n    \"customerName\": \"MAK\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/orders/",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"orders",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "https://simple-books-api.glitch.me",
+			"type": "string"
+		}
+	]
+}
