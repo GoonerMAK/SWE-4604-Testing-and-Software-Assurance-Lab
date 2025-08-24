@@ -1,0 +1,327 @@
+{
+	"info": {
+		"_postman_id": "eadd626d-c4b6-4447-ac1d-efc52d8067b4",
+		"name": "LabFinalA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "26308224"
+	},
+	"item": [
+		{
+			"name": "Get Safety Products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Getting Safety Products\", function () {",
+							"    pm.response.to.have.status(200); ",
+							"",
+							"    var responseBody = pm.response.json();",
+							"",
+							"    pm.expect(responseBody.data).to.be.an('array').that.is.not.empty;",
+							"",
+							"    responseBody.data.forEach(function(product) {",
+							"        pm.expect(product.name.toLowerCase()).to.include('safety');",
+							"    });",
+							"",
+							"    pm.environment.set(\"Safety\", responseBody.data[0].id);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5wcmFjdGljZXNvZnR3YXJldGVzdGluZy5jb20vdXNlcnMvbG9naW4iLCJpYXQiOjE3MTUzMTk2MTUsImV4cCI6MTcxNTMxOTkxNSwibmJmIjoxNzE1MzE5NjE1LCJqdGkiOiJiMHpFYmNDVTVSVTRyRWxkIiwic3ViIjoiMDFoeGdmdDA0dnN6N3plYjhxNWJhNHo1cmEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3Iiwicm9sZSI6InVzZXIifQ.-e6ypsD13gBDxX_6_tdIcq35Dy1DCSN1TXZXD_YjhCY"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{TOOLSHOP_URL}}/products/search?q=Safety",
+					"host": [
+						"{{TOOLSHOP_URL}}"
+					],
+					"path": [
+						"products",
+						"search"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "Safety"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Nuts Products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Getting nuts search\", function () {",
+							"    pm.response.to.have.status(200); ",
+							"",
+							"    var responseBody = pm.response.json();",
+							"",
+							"    pm.expect(responseBody.data).to.be.an('array').that.is.not.empty;",
+							"",
+							"    var nutsProducts = responseBody.data.filter(function(product) {",
+							"        return product.name.toLowerCase().includes('nuts');",
+							"    });",
+							"",
+							"    pm.expect(nutsProducts.length).to.equal(2);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5wcmFjdGljZXNvZnR3YXJldGVzdGluZy5jb20vdXNlcnMvbG9naW4iLCJpYXQiOjE3MTUzMTk2MTUsImV4cCI6MTcxNTMxOTkxNSwibmJmIjoxNzE1MzE5NjE1LCJqdGkiOiJiMHpFYmNDVTVSVTRyRWxkIiwic3ViIjoiMDFoeGdmdDA0dnN6N3plYjhxNWJhNHo1cmEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3Iiwicm9sZSI6InVzZXIifQ.-e6ypsD13gBDxX_6_tdIcq35Dy1DCSN1TXZXD_YjhCY"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{TOOLSHOP_URL}}/products/search?q=Nuts",
+					"host": [
+						"{{TOOLSHOP_URL}}"
+					],
+					"path": [
+						"products",
+						"search"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "Nuts"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register User 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User Test 1\", function(){\r",
+							"    pm.expect(pm.response.code).to.be.eql(422);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"mak.115@user.com\",\r\n    \"password\": \"mak.115\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{TOOLSHOP_URL}}/users/register"
+			},
+			"response": []
+		},
+		{
+			"name": "Register User 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User Test 2\", function(){\r",
+							"    pm.expect(pm.response.code).to.be.eql(422);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"first_name\": \"Mashrur\",\r\n    \"last_name\": \"Ahsan\",\r\n    \"email\": \"mak.115@user.com\",\r\n    \"password\": \"mak.115\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{TOOLSHOP_URL}}/users/register"
+			},
+			"response": []
+		},
+		{
+			"name": "Register User 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User Test 3\", function(){\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 200]);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"first_name\": \"Mashrur\",\r\n    \"last_name\": \"Ahsan\",\r\n    \"phone\": \"123456789\",\r\n    \"dob\" :  \"1970-01-01\",\r\n    \"password\": \"Super-Secret-123\",\r\n    \"email\": \"mak@doe.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{TOOLSHOP_URL}}/users/register"
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login Successful\", function () {\r",
+							"    pm.response.to.have.status(200); \r",
+							"    pm.response.to.have.jsonBody(\"access_token\"); \r",
+							"\r",
+							"    var responseBody = pm.response.json();\r",
+							"\r",
+							"    pm.globals.set(\"access_token\", responseBody.access_token);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"mak@doe.com\",\r\n    \"password\": \"Super-Secret-123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{TOOLSHOP_URL}}/users/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Cart",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create Cart Test\", function(){\r",
+							"    pm.expect(pm.response.code).to.be.eql(201);\r",
+							"\r",
+							"    var responseBody = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseBody.id).to.exist;\r",
+							"\r",
+							"    pm.environment.set(\"cartID\", responseBody.id);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5wcmFjdGljZXNvZnR3YXJldGVzdGluZy5jb20vdXNlcnMvbG9naW4iLCJpYXQiOjE3MTUzMTk2MTUsImV4cCI6MTcxNTMxOTkxNSwibmJmIjoxNzE1MzE5NjE1LCJqdGkiOiJiMHpFYmNDVTVSVTRyRWxkIiwic3ViIjoiMDFoeGdmdDA0dnN6N3plYjhxNWJhNHo1cmEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3Iiwicm9sZSI6InVzZXIifQ.-e6ypsD13gBDxX_6_tdIcq35Dy1DCSN1TXZXD_YjhCY"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"url": "{{TOOLSHOP_URL}}/carts"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "TOOLSHOP_URL",
+			"value": "https://api.practicesoftwaretesting.com",
+			"type": "string"
+		},
+		{
+			"key": "user1",
+			"value": "01hxgft04vsz7zeb8q5ba4z5ra",
+			"type": "string"
+		}
+	]
+}
